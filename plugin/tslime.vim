@@ -76,7 +76,7 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-vmap <C-c><C-c> "ry :call Send_to_Tmux(@r)<CR>
-nmap <C-c><C-c> vip<C-c><C-c>
+vmap <unique> <Plug>Selection_To_Tmux "ry :call Send_to_Tmux(@r)<CR>
+nmap <unique> <Plug>N_Mode_Send_To_Tmux vip :call <Plug>Selection_To_Tmux
 
-nmap <C-c>v :call <SID>Tmux_Vars()<CR>
+nmap <unique> <Plug>Set_Tmux_Vars :call <SID>Tmux_Vars()<CR>
