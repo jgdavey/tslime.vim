@@ -24,17 +24,20 @@ keybinding on a user, I have set some default keybindings plugin methods that a
 user can set in there `.vimrc`.
 
 To send a selection in visual mode to vim, set the following in your `.vimrc`:
-``` vim
+
+``` VimL
   vmap <your_key_combo> <Plug>Selection_To_Tmux
 ```
 
 To grab the current method that a cursor is in normal mode, set the following:
-``` vim
+
+``` VimL
   nmap <your_key_combo> <Plug>N_Mode_Send_To_Tmux
 ```
 
 Use the following to reset the session, window, and pane info:
-``` vim
+
+``` VimL
   nmap <your_key_combo> <Plug>Set_Tmux_Vars
 ```
 
