@@ -25,17 +25,17 @@ user can set in there `.vimrc`.
 
 To send a selection in visual mode to vim, set the following in your `.vimrc`:
 ``` vim
-  vmap <your_key_combo> <Plug>Selection_To_Tmux
+  vmap <your_key_combo> <Plug>SendSelectionToTmux
 ```
 
 To grab the current method that a cursor is in normal mode, set the following:
 ``` vim
-  nmap <your_key_combo> <Plug>N_Mode_Send_To_Tmux
+  nmap <your_key_combo> <Plug>NormalModeSendToTmux
 ```
 
 Use the following to reset the session, window, and pane info:
 ``` vim
-  nmap <your_key_combo> <Plug>Set_Tmux_Vars
+  nmap <your_key_combo> <Plug>SetTmuxVars
 ```
 
 More info about the `<Plug>` and other mapping syntax can be found

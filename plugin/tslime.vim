@@ -76,7 +76,7 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-vmap <unique> <Plug>Selection_To_Tmux "ry :call Send_to_Tmux(@r)<CR>
-nmap <unique> <Plug>N_Mode_Send_To_Tmux vip :call <Plug>Selection_To_Tmux
+vmap <unique> <Plug>SendSelectionToTmux "ry :call Send_to_Tmux(@r)<CR>
+nmap <unique> <Plug>NormalModeSendToTmux vip <Plug>SendSelectionToTmux
 
-nmap <unique> <Plug>Set_Tmux_Vars :call <SID>Tmux_Vars()<CR>
+nmap <unique> <Plug>SetTmuxVars :call <SID>Tmux_Vars()<CR>
