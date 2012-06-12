@@ -15,7 +15,7 @@ function! Send_to_Tmux(text)
     call <SID>Tmux_Vars()
   end
 
-  let oldbuffer = system("tmux show-buffer")
+  let oldbuffer = system(shellescape("tmux show-buffer"))
   call <SID>set_tmux_buffer(a:text)
   call system("tmux paste-buffer -t " . s:tmux_target())
   call <SID>set_tmux_buffer(oldbuffer)
