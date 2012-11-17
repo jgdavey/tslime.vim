@@ -22,7 +22,7 @@ function! Send_to_Tmux(text)
 endfunction
 
 function! s:tmux_target()
-  return g:tmux_sessionname . ":" . g:tmux_windowname . "." . g:tmux_panenumber
+  return '"' . g:tmux_sessionname . '":' . g:tmux_windowname . "." . g:tmux_panenumber
 endfunction
 
 function! s:set_tmux_buffer(text)
@@ -40,12 +40,12 @@ endfunction
 
 " Window completion
 function! Tmux_Window_Names(A,L,P)
-  return system("tmux list-windows -t" . g:tmux_sessionname . ' | grep -e "^\w:" | sed -e "s/ \[[0-9x]*\]$//"')
+  return system('tmux list-windows -t "' . g:tmux_sessionname . '" | grep -e "^\w:" | sed -e "s/ \[[0-9x]*\]$//"')
 endfunction
 
 " Pane completion
 function! Tmux_Pane_Numbers(A,L,P)
-  return system("tmux list-panes -t " . g:tmux_sessionname . ":" . g:tmux_windowname . " | sed -e 's/:.*$//'")
+  return system('tmux list-panes -t "' . g:tmux_sessionname . '":' . g:tmux_windowname . " | sed -e 's/:.*$//'")
 endfunction
 
 " set tslime.vim variables
