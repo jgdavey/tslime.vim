@@ -40,17 +40,25 @@ endfunction
 
 " Window completion
 function! Tmux_Window_Names(A,L,P)
-  return system('tmux list-windows -t "' . g:tmux_sessionname . '" | grep -e "^\w:" | sed -e "s/ \[[0-9x]*\]$//"')
+  return <SID>TmuxWindows()
 endfunction
 
 " Pane completion
 function! Tmux_Pane_Numbers(A,L,P)
-  return system('tmux list-panes -t "' . g:tmux_sessionname . '":' . g:tmux_windowname . " | sed -e 's/:.*$//'")
+  return <SID>TmuxPanes()
 endfunction
 
 function! s:TmuxSessions()
   let sessions = system("tmux list-sessions | sed -e 's/:.*$//'")
   return sessions
+endfunction
+
+function! s:TmuxWindows()
+  return system('tmux list-windows -t "' . g:tmux_sessionname . '" | grep -e "^\w:" | sed -e "s/ \[[0-9x]*\]$//"')
+endfunction
+
+function! s:TmuxPanes()
+  return system('tmux list-panes -t "' . g:tmux_sessionname . '":' . g:tmux_windowname . " | sed -e 's/:.*$//'")
 endfunction
 
 " set tslime.vim variables
@@ -64,8 +72,20 @@ function! s:Tmux_Vars()
   while g:tmux_sessionname == ''
     let g:tmux_sessionname = input("session name: ", "", "custom,Tmux_Session_Names")
   endwhile
-  let g:tmux_windowname = substitute(input("window name: ", "", "custom,Tmux_Window_Names"), ":.*$" , '', 'g')
-  let g:tmux_panenumber = input("pane number: ", "", "custom,Tmux_Pane_Numbers")
+
+  let windows = split(s:TmuxWindows(), "\n")
+  if len(windows) == 1
+    let g:tmux_windowname = substitute(windows[0], ":.*$" , '', 'g')
+  else
+    let g:tmux_windowname = substitute(input("window name: ", "", "custom,Tmux_Window_Names"), ":.*$" , '', 'g')
+  endif
+
+  let panes = split(s:TmuxPanes(), "\n")
+  if len(panes) == 1
+    let g:tmux_panenumber = panes[0]
+  else
+    let g:tmux_panenumber = input("pane number: ", "", "custom,Tmux_Pane_Numbers")
+  endif
 
   if g:tmux_windowname == ''
     let g:tmux_windowname = '0'
