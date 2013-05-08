@@ -26,7 +26,9 @@ function! s:tmux_target()
 endfunction
 
 function! s:set_tmux_buffer(text)
-  call system("tmux set-buffer '" . substitute(a:text, "'", "'\\\\''", 'g') . "'" )
+  call writefile(split(a:text, "\<NL>"), '/tmp/vim-tslime-buffer')
+  call system("tmux load-buffer /tmp/vim-tslime-buffer")
+  call writefile([], '/tmp/vim-tslime-buffer') " file truncated but previous contents NOT SECURELY DELETED
 endfunction
 
 function! SendToTmux(text)
