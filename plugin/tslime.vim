@@ -19,6 +19,7 @@ function! Send_to_Tmux(text)
   call <SID>set_tmux_buffer(a:text)
   call system("tmux paste-buffer -t " . s:tmux_target())
   call <SID>set_tmux_buffer(oldbuffer)
+  normal ``
 endfunction
 
 function! s:tmux_target()
@@ -26,7 +27,7 @@ function! s:tmux_target()
 endfunction
 
 function! s:set_tmux_buffer(text)
-  call system("tmux set-buffer '" . substitute(a:text, "'", "'\\\\''", 'g') . "'" )
+  call system("echo '" . substitute(a:text, "'", "'\\\\''", 'g') . "' | tmux load-buffer -" )
 endfunction
 
 function! SendToTmux(text)
@@ -97,8 +98,8 @@ function! s:Tmux_Vars()
   endif
 endfunction
 
-vmap <unique> <Plug>SendSelectionToTmux "ry :call Send_to_Tmux(@r)<CR>
-nmap <unique> <Plug>NormalModeSendToTmux vip <Plug>SendSelectionToTmux
+vmap <unique> <Plug>SendSelectionToTmux m`"ry :call Send_to_Tmux(@r)<CR>
+nmap <unique> <Plug>NormalModeSendToTmux m`vip"ry :call Send_to_Tmux(@r)<CR>
 
 nmap <unique> <Plug>SetTmuxVars :call <SID>Tmux_Vars()<CR>
 
