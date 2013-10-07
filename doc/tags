@@ -1,0 +1,12 @@
+:Tmux	tslime.txt	/*:Tmux*
+NormalModeSendToTmux	tslime.txt	/*NormalModeSendToTmux*
+SendKeysToTmux()	tslime.txt	/*SendKeysToTmux()*
+SendSelectionToTmux	tslime.txt	/*SendSelectionToTmux*
+SendToTmux()	tslime.txt	/*SendToTmux()*
+Send_Keys_To_Tmux()	tslime.txt	/*Send_Keys_To_Tmux()*
+Send_To_Tmux()	tslime.txt	/*Send_To_Tmux()*
+SetTmuxVars	tslime.txt	/*SetTmuxVars*
+tslime-commands	tslime.txt	/*tslime-commands*
+tslime-intro	tslime.txt	/*tslime-intro*
+tslime-maps	tslime.txt	/*tslime-maps*
+tslime.txt	tslime.txt	/*tslime.txt*

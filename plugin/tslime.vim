@@ -10,58 +10,59 @@ let g:loaded_tslime = 1
 
 " Function to send keys to tmux
 " useful if you want to stop some command with <c-c> in tmux.
-function! Send_keys_to_Tmux(keys)
+function! SendKeysToTmux(keys)
   if !exists("g:tslime")
-    call <SID>Tmux_Vars()
+    call <SID>TmuxVars()
   end
 
-  call system("tmux send-keys -t " . s:tmux_target() . " " . a:keys)
+  for k in split(a:keys, '\s')
+    call <SID>ExecuteKeys(k)
+  endfor
+endfunction
+
+function! s:ExecuteKeys(keys)
+  call system("tmux send-keys -t " . s:tmuxTarget() . " " . a:keys)
 endfunction
 
 " Main function.
 " Use it in your script if you want to send text to a tmux session.
-function! Send_to_Tmux(text)
+function! SendToTmux(text)
   if !exists("g:tslime")
-    call <SID>Tmux_Vars()
+    call <SID>TmuxVars()
   end
 
   let oldbuffer = system(shellescape("tmux show-buffer"))
-  call <SID>set_tmux_buffer(a:text)
-  call system("tmux paste-buffer -t " . s:tmux_target())
-  call <SID>set_tmux_buffer(oldbuffer)
+  call <SID>setTmuxBuffer(a:text)
+  call system("tmux paste-buffer -t " . s:tmuxTarget())
+  call <SID>setTmuxBuffer(oldbuffer)
 endfunction
 
-function! s:tmux_target()
+function! s:tmuxTarget()
   return '"' . g:tslime['session'] . '":' . g:tslime['window'] . "." . g:tslime['pane']
 endfunction
 
-function! s:set_tmux_buffer(text)
+function! s:setTmuxBuffer(text)
   let buf = substitute(a:text, "'", "\\'", 'g')
   call system("tmux load-buffer -", buf)
 endfunction
 
-function! SendToTmux(text)
-  call Send_to_Tmux(a:text)
-endfunction
-
 " Session completion
-function! Tmux_Session_Names(A,L,P)
+function! TmuxSessionNames(A,L,P)
   return <SID>TmuxSessions()
 endfunction
 
 " Window completion
-function! Tmux_Window_Names(A,L,P)
+function! TmuxWindowNames(A,L,P)
   return <SID>TmuxWindows()
 endfunction
 
 " Pane completion
-function! Tmux_Pane_Numbers(A,L,P)
+function! TmuxPaneNumbers(A,L,P)
   return <SID>TmuxPanes()
 endfunction
 
 function! s:TmuxSessions()
-  let sessions = system("tmux list-sessions | sed -e 's/:.*$//'")
-  return sessions
+  return system("tmux list-sessions | sed -e 's/:.*$//'")
 endfunction
 
 function! s:TmuxWindows()
@@ -73,7 +74,7 @@ function! s:TmuxPanes()
 endfunction
 
 " set tslime.vim variables
-function! s:Tmux_Vars()
+function! s:TmuxVars()
   let names = split(s:TmuxSessions(), "\n")
   let g:tslime = {}
   if len(names) == 1
@@ -82,14 +83,14 @@ function! s:Tmux_Vars()
     let g:tslime['session'] = ''
   endif
   while g:tslime['session'] == ''
-    let g:tslime['session'] = input("session name: ", "", "custom,Tmux_Session_Names")
+    let g:tslime['session'] = input("session name: ", "", "custom,TmuxSessionNames")
   endwhile
 
   let windows = split(s:TmuxWindows(), "\n")
   if len(windows) == 1
     let window = windows[0]
   else
-    let window = input("window name: ", "", "custom,Tmux_Window_Names")
+    let window = input("window name: ", "", "custom,TmuxWindowNames")
     if window == ''
       let window = windows[0]
     endif
@@ -101,16 +102,16 @@ function! s:Tmux_Vars()
   if len(panes) == 1
     let g:tslime['pane'] = panes[0]
   else
-    let g:tslime['pane'] = input("pane number: ", "", "custom,Tmux_Pane_Numbers")
+    let g:tslime['pane'] = input("pane number: ", "", "custom,TmuxPaneNumbers")
     if g:tslime['pane'] == ''
       let g:tslime['pane'] = panes[0]
     endif
   endif
 endfunction
 
-vmap <unique> <Plug>SendSelectionToTmux "ry :call Send_to_Tmux(@r)<CR>
+vmap <unique> <Plug>SendSelectionToTmux "ry :call SendToTmux(@r)<CR>
 nmap <unique> <Plug>NormalModeSendToTmux vip <Plug>SendSelectionToTmux
 
-nmap <unique> <Plug>SetTmuxVars :call <SID>Tmux_Vars()<CR>
+nmap <unique> <Plug>SetTmuxVars :call <SID>TmuxVars()<CR>
 
-command! -nargs=* Tmux call Send_to_Tmux('<Args><CR>')
+command! -nargs=* Tmux call SendToTmux('<Args><CR>')

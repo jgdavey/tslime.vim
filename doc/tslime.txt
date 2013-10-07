@@ -1,0 +1,69 @@
+*tslime.txt*  tslime -- Send text and keys to tmux.
+
+========================================================================
+Contents~
+
+	1.Intro ................................. |tslime-intro|
+	2.Commands .............................. |tslime-commands|
+	3.Custom Maps ........................... |tslime-maps|
+
+========================================================================
+1. Intro				*tslime-intro*
+
+This is a simple vim script to send portion of text from a vim buffer to a
+running tmux session.
+
+It is based on slime.vim
+http://technotales.wordpress.com/2007/10/03/like-slime-for-vim/, but use tmux
+instead of screen. However, compared to tmux, screen doesn't have the notion
+of panes. So, the script was adapted to take panes into account.
+
+Note: If you use version of tmux ealier than 1.3, you should use the stable
+branch. The version available in that branch isn't aware of panes so it will
+paste to pane 0 of the window.
+
+========================================================================
+2. Commands			 *tslime-commands*
+
+
+:Tmux {args}			 *:Tmux*
+		Command to send args to tmux.
+
+		:Tmux ls
+
+
+SendToTmux({text})		 *Send_To_Tmux()* *SendToTmux()*
+		Function to send args to tmux.
+
+		:call SendToTmux('ls')
+
+
+SendKeysToTmux({keys})		*Send_Keys_To_Tmux()* *SendKeysToTmux()*
+		Function to send {keys} to tmux.
+
+		" Sends <c-c> to tmux (kill currently process)
+		:call SendKeysToTmux('C-c')
+
+========================================================================
+3. Custom Maps			 *tslime-maps*
+
+
+SendSelectionToTmux		*SendSelectionToTmux*
+		Visual map to send selection to tmux.
+
+		vmap <keys> <Plug>SendSelectionToTmux
+
+
+NormalModeSendToTmux		*NormalModeSendToTmux*
+		Send current paragraph to tmux.
+
+		nmap <keys> <Plug>NormalModeSendToTmux
+
+
+SetTmuxVars			*SetTmuxVars*
+		Reset tmux vars, panel name, window name
+
+		nmap <keys> <Plug>NormalModeSendToTmux
+
+
+vim:tw=78:ts=8:ft=help:norl:noet:
