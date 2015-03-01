@@ -60,7 +60,7 @@ function! Tmux_Pane_Numbers(A,L,P)
 endfunction
 
 function! s:ActiveTarget()
-  return split(system('tmux list-panes -F "active=#{pane_active} #{session_name},#{window_index},#{pane_index}" | grep "active=1" | sed -e "s/.*\s//" -e "s/,/\n/g"'), '\n')
+  return split(system('tmux list-panes -F "active=#{pane_active} #{session_name},#{window_index},#{pane_index}" | grep "active=1" | cut -d " " -f 2 | tr , "\n"'), '\n')
 endfunction
 
 function! s:TmuxSessions()
