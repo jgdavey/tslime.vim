@@ -15,7 +15,7 @@ function! Send_keys_to_Tmux(keys)
     call <SID>Tmux_Vars()
   endif
 
-  call system("tmux send-keys -t " . s:tmux_target() . " " . a:keys)
+  call system(<SID>tmux_command() . " send-keys -t " . s:tmux_target() . " " . a:keys)
 endfunction
 
 " Main function.
@@ -26,8 +26,8 @@ function! Send_to_Tmux(text)
   endif
 
   call <SID>set_tmux_buffer(a:text)
-  call system("tmux paste-buffer -t " . s:tmux_target())
-  call system("tmux delete-buffer")
+  call system(<SID>tmux_command() . " paste-buffer -t " . s:tmux_target())
+  call system(<SID>tmux_command() . " delete-buffer")
 endfunction
 
 function! s:tmux_target()
@@ -36,11 +36,24 @@ endfunction
 
 function! s:set_tmux_buffer(text)
   let buf = substitute(a:text, "'", "\\'", 'g')
-  call system("tmux load-buffer -", buf)
+  call system(<SID>tmux_command() . " load-buffer -", buf)
+endfunction
+
+function! s:tmux_command()
+  if exists("g:tslime['socket']")
+    return "tmux -S " . g:tslime['socket']
+  else
+    return "tmux"
+  endif
 endfunction
 
 function! SendToTmux(text)
   call Send_to_Tmux(a:text)
+endfunction
+
+" Session completion
+function! Tmux_Socket_Names(A,L,P)
+  return <SID>TmuxSockets()
 endfunction
 
 " Session completion
@@ -59,22 +72,41 @@ function! Tmux_Pane_Numbers(A,L,P)
 endfunction
 
 function! s:TmuxSessions()
-  let sessions = system("tmux list-sessions | sed -e 's/:.*$//'")
+  let sessions = system(<SID>tmux_command() . " list-sessions | sed -e 's/:.*$//'")
   return sessions
 endfunction
 
 function! s:TmuxWindows()
-  return system('tmux list-windows -t "' . g:tslime['session'] . '" | grep -e "^\w:" | sed -e "s/\s*([0-9].*//g"')
+  return system(<SID>tmux_command() . ' list-windows -t "' . g:tslime['session'] . '" | grep -e "^\w:" | sed -e "s/\s*([0-9].*//g"')
 endfunction
 
 function! s:TmuxPanes()
-  return system('tmux list-panes -t "' . g:tslime['session'] . '":' . g:tslime['window'] . " | sed -e 's/:.*$//'")
+  return system(<SID>tmux_command() . ' list-panes -t "' . g:tslime['session'] . '":' . g:tslime['window'] . " | sed -e 's/:.*$//'")
+endfunction
+
+function! s:TmuxSockets()
+  return system("lsof -U | grep '^tmux\\|^tmate' | grep -v '\\->0x' | grep -oE '[^      ]+$'")
 endfunction
 
 " set tslime.vim variables
 function! s:Tmux_Vars()
-  let names = split(s:TmuxSessions(), "\n")
   let g:tslime = {}
+
+  let sockets = split(s:TmuxSockets(), "\n") 
+  let no_unsocketted_sessions = s:TmuxSessions() == "failed to connect to server\n"
+  if no_unsocketted_sessions && len(sockets) == 1
+    let g:tslime['socket'] = sockets[0]
+  else
+    if len(sockets) > 0
+      let g:tslime['socket'] = ''
+      let g:tslime['socket'] = input("socket name (leave blank for no socket): ", "", "custom,Tmux_Socket_Names")
+      if g:tslime['socket'] == ''
+        unlet g:tslime['socket']
+      endif
+    endif
+  endif
+
+  let names = split(s:TmuxSessions(), "\n")
   if len(names) == 1
     let g:tslime['session'] = names[0]
   else
