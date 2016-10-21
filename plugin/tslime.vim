@@ -77,22 +77,25 @@ function! s:TmuxWindows()
 endfunction
 
 function! s:TmuxPanes()
-  let all_panes = split(system('tmux list-panes -t "' . g:tslime['session'] . '":' . g:tslime['window'] . " -F '#{pane_index}'"), '\n')
+  if exists("g:tslime_pane_name") && g:tslime_pane_name
+    let all_panes = split(system('tmux list-panes -t "' . g:tslime['session'] . '":' . g:tslime['window'] . " -F '#{pane_index}'"), '\n')
 
-  " If we're in the active session & window, filter away current pane from
-  " possibilities
-  let active = <SID>ActiveTarget()
-  let current = [g:tslime['session'], g:tslime['window']]
-  if active[0:1] == current
-    call filter(all_panes, 'v:val != ' . active[2])
-  endif
+    " If we're in the active session & window, filter away current pane from
+    " possibilities
+    let active = <SID>ActiveTarget()
+    let current = [g:tslime['session'], g:tslime['window']]
+    if active[0:1] == current
+      call filter(all_panes, 'v:val != ' . active[2])
+    endif
+  else
+    all_panes = g:tslime_pane_name
+  end
   return all_panes
 endfunction
 
 " set tslime.vim variables
 function! s:Tmux_Vars()
   let names = s:TmuxSessions()
-  echo names
   let g:tslime = {}
   if len(names) == 1
     let g:tslime['session'] = names[0]
