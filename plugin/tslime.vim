@@ -78,6 +78,8 @@ endfunction
 
 function! s:TmuxPanes()
   if exists("g:tslime_pane_name") && g:tslime_pane_name
+    all_panes = g:tslime_pane_name
+  else
     let all_panes = split(system('tmux list-panes -t "' . g:tslime['session'] . '":' . g:tslime['window'] . " -F '#{pane_index}'"), '\n')
 
     " If we're in the active session & window, filter away current pane from
@@ -87,8 +89,6 @@ function! s:TmuxPanes()
     if active[0:1] == current
       call filter(all_panes, 'v:val != ' . active[2])
     endif
-  else
-    all_panes = g:tslime_pane_name
   end
   return all_panes
 endfunction
