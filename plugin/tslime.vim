@@ -60,6 +60,7 @@ function! s:TmuxSessions()
   if exists("g:tslime_always_current_session") && g:tslime_always_current_session
     let sessions = <SID>ActiveTarget()[0:0]
     let sessions = split(system("tmux list-sessions -F '#{session_name}'"), '\n')
+    echo sessions
   endif
   return sessions
 endfunction
@@ -67,6 +68,7 @@ endfunction
 function! s:TmuxWindows()
   if exists("g:tslime_always_current_window") && g:tslime_always_current_window
     let windows = <SID>ActiveTarget()[1:1]
+    echo windows
   else
     let windows = split(system('tmux list-windows -F "#{window_index}" -t ' . g:tslime['session']), '\n')
   endif
@@ -89,6 +91,7 @@ endfunction
 " set tslime.vim variables
 function! s:Tmux_Vars()
   let names = s:TmuxSessions()
+  echo names
   let g:tslime = {}
   if len(names) == 1
     let g:tslime['session'] = names[0]
