@@ -59,7 +59,6 @@ endfunction
 function! s:TmuxSessions()
   if exists("g:tslime_always_current_session") && g:tslime_always_current_session
     let sessions = <SID>ActiveTarget()[0:0]
-  else
     let sessions = split(system("tmux list-sessions -F '#{session_name}'"), '\n')
   endif
   return sessions
@@ -103,6 +102,8 @@ function! s:Tmux_Vars()
   let windows = s:TmuxWindows()
   if len(windows) == 1
     let window = windows[0]
+  elseif exists("g:tslime_window_name") && g:tslime_window_name
+    let window = g:tslime_window_name
   else
     let window = input("window name: ", "", "customlist,Tmux_Window_Names")
     if window == ''
