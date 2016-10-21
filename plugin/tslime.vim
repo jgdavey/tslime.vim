@@ -69,7 +69,7 @@ function! s:TmuxWindows()
   if exists("g:tslime_always_current_window") && g:tslime_always_current_window
     let windows = <SID>ActiveTarget()[1:1]
   elseif exists("g:tslime_window_name") && g:tslime_window_name
-    let windows = g:tsline_window_name
+    let windows = g:tslime_window_name
   else
     let windows = split(system('tmux list-windows -F "#{window_index}" -t ' . g:tslime['session']), '\n')
   endif
