@@ -78,7 +78,7 @@ endfunction
 
 function! s:TmuxPanes()
   if exists("g:tslime_pane_name") && g:tslime_pane_name
-    all_panes = g:tslime_pane_name
+    let all_panes = g:tslime_pane_name
   else
     let all_panes = split(system('tmux list-panes -t "' . g:tslime['session'] . '":' . g:tslime['window'] . " -F '#{pane_index}'"), '\n')
 
