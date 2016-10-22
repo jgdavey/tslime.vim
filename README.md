@@ -19,11 +19,24 @@ Settings
 You can tell tslime.vim to use the current session and current window, this let's you 
 avoid specifying this on every upstart of vim.
 
+```
 let g:tslime_always_current_session = 1
 let g:tslime_always_current_window = 1
-
+```
 These are disabled by default, meaning you will have the ability to choose from every 
 session/window/pane combination.
+
+#### Default Window / Pane
+
+If you work with a similar tmux enviornment regularly, you might want to set a default window name, or default pane name. You can do this by setting the following:
+
+```
+let g:tslime_window_name = <name_of_your_some_window>
+let g:tslime_pane_name = <name_of_some_pane
+
+```
+If either of these are set, you will not be asked to enter a window name, or a pane name when you run any of the plugin commands.
+
 
 Setting Keybindings
 -------------------
