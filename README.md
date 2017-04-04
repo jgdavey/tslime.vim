@@ -19,11 +19,22 @@ Settings
 You can tell tslime.vim to use the current session and current window, this let's you 
 avoid specifying this on every upstart of vim.
 
+Put the following in your `.vimrc` file.
+
+``` vim
 let g:tslime_always_current_session = 1
 let g:tslime_always_current_window = 1
+```
 
 These are disabled by default, meaning you will have the ability to choose from every 
 session/window/pane combination.
+
+If you never want to select your pane, but want tslime to automatically send your text to
+the pane in the current window with the largest height, put the following in your `.vimrc`
+
+```vim
+let g:tslime_autoset_pane = 1
+```
 
 Setting Keybindings
 -------------------
