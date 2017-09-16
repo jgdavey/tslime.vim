@@ -40,7 +40,10 @@ endfunction
 function! s:ensure_newlines(text)
   let text = a:text
   let trailing_newlines = matchstr(text, '\v\n*$')
-  let spaces_to_add = g:tslime_ensure_trailing_newlines - strlen(trailing_newlines)
+  if !exists("b:tslime_ensure_trailing_newlines")
+      let b:tslime_ensure_trailing_newlines = g:tslime_ensure_trailing_newlines
+  endif
+  let spaces_to_add = b:tslime_ensure_trailing_newlines - strlen(trailing_newlines)
 
   while spaces_to_add > 0
     let spaces_to_add -= 1
