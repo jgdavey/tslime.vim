@@ -8,6 +8,10 @@ endif
 
 let g:loaded_tslime = 1
 
+if !exists("g:tslime_ensure_trailing_newlines")
+  let g:tslime_ensure_trailing_newlines = 0
+endif
+
 " Function to send keys to tmux
 " useful if you want to stop some command with <c-c> in tmux.
 function! Send_keys_to_Tmux(keys)
@@ -33,7 +37,24 @@ function! s:set_tmux_buffer(text)
   call system("tmux load-buffer -", buf)
 endfunction
 
+function! s:ensure_newlines(text)
+  let text = a:text
+  let trailing_newlines = matchstr(text, '\v\n*$')
+  let spaces_to_add = g:tslime_ensure_trailing_newlines - strlen(trailing_newlines)
+
+  while spaces_to_add > 0
+    let spaces_to_add -= 1
+    let text .= "\n"
+  endwhile
+
+  return text
+endfunction
+
 function! SendToTmux(text)
+  call Send_to_Tmux(s:ensure_newlines(a:text))
+endfunction
+
+function! SendToTmuxRaw(text)
   call Send_to_Tmux(a:text)
 endfunction
 
