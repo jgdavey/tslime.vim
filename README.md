@@ -25,6 +25,21 @@ let g:tslime_always_current_window = 1
 These are disabled by default, meaning you will have the ability to choose from every 
 session/window/pane combination.
 
+You can also configure tslime.vim to automatically append newlines to the text
+that will be sent to tmux:
+
+    let g:tslime_ensure_trailing_newlines = 1
+
+This is handy when you want to evaluate part of a line as a line of its own,
+or when the REPL you are sending text two requires expressions to be followed
+by a defined number of new lines (eg. Python):
+
+    augroup ft_python
+        au!
+
+        let b:tslime_ensure_trailing_newlines = 2
+    augroup END
+
 Setting Keybindings
 -------------------
 
