@@ -103,6 +103,11 @@ function! s:Tmux_Vars()
   let windows = s:TmuxWindows()
   if len(windows) == 1
     let window = windows[0]
+  elseif exists("g:tslime_window")
+    let window = string(g:tslime_window)
+    if (index(windows, window) < 0)
+      let window = windows[0]
+    endif
   else
     let window = input("window name: ", "", "customlist,Tmux_Window_Names")
     if window == ''
@@ -115,6 +120,11 @@ function! s:Tmux_Vars()
   let panes = s:TmuxPanes()
   if len(panes) == 1
     let g:tslime['pane'] = panes[0]
+  elseif exists("g:tslime_pane")
+    let g:tslime['pane'] = string(g:tslime_pane)
+    if (index(panes, g:tslime['pane']) < 0)
+      let g:tslime['pane'] = panes[0]
+    endif
   else
     let g:tslime['pane'] = input("pane number: ", "", "customlist,Tmux_Pane_Numbers")
     if g:tslime['pane'] == ''
