@@ -112,12 +112,8 @@ function! s:AutoTmuxPanes()
   " have to do this stupid loop because max(valid_panes) doesn't work
   let biggest_height = 0
   for [index, height] in items(valid_panes)
-    if height > biggest_height
+    if height >= biggest_height
       let biggest_height = height
-    endif
-  endfor
-  for [index, height] in items(valid_panes)
-    if  height == biggest_height
       let biggest_pane = index
     endif
   endfor
